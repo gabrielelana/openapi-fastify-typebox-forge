@@ -1,6 +1,6 @@
-## Derive Fastify types from an OpenAPI specification
+## Generate Fastify types from an OpenAPI specification
 
-If you design your API by creating the OpenAPI specification first then if you
+If you design your API by creating the OpenAPI specification first and if you
 use [Fastify](https://fastify.dev/) with
 [TypeBox](https://github.com/sinclairzx81/typebox) a type provider then you will
 find this project useful.
@@ -28,7 +28,7 @@ Let's say that we are using [this example](./resources/examples/example.json)
  following files will be generated
 
 ```console
-❯ ll .tmp/.tg/example
+❯ ll node_modules/.openapi
 total 64
 drwxrwxr-x 2 coder coder 4096 Jul 25 16:07 .
 drwxrwxr-x 4 coder coder 4096 Jul 25 16:07 ..
