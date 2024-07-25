@@ -1,0 +1,26 @@
+{
+  "testEnvironment": "node",
+  "collectCoverage": false,
+  "coverageDirectory": "coverage",
+  "coveragePathIgnorePatterns": [],
+  "collectCoverageFrom": ["./src/**/*.ts"],
+  "modulePathIgnorePatterns": [
+    "./.git",
+    "./.log",
+    "./coverage",
+    "./dist",
+    "./build",
+    "./node_modules"
+  ],
+  "setupFilesAfterEnv": ["./test/bootstrap.ts"],
+  "transform": {
+    "^.+\\.ts?$": [
+      "ts-jest",
+      {
+        "tsconfig": "./tsconfig.jest.json",
+        "compiler": "ts-patch/compiler"
+      }
+    ]
+  },
+  "moduleFileExtensions": ["ts", "js", "json"]
+}

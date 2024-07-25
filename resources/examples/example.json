@@ -1,0 +1,308 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "OpenAPI example",
+        "summary": "OpenAPI example",
+        "description": "This is a longer *description* for this example",
+        "version": "0.0.1"
+    },
+    "servers": [],
+    "paths": {
+        "/ping": {
+            "get": {
+                "operationId": "ping",
+                "summary": "Ping to the server, if it's healthy it will reply pong.",
+                "responses": {
+                    "200": {
+                        "description": "Everything is ok.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string",
+                                    "const": "pong"
+                                },
+                                "example": "pong"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "An error was raised and we didn't catch it :-/",
+                        "content": {
+                            "application/problem+json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properites": {
+                                        "status": {
+                                            "type": "number",
+                                            "const": 500
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "const": "UNHANDLED_ERROR"
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                },
+                                                "stack": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "fileName": {
+                                                                "type": "string"
+                                                            },
+                                                            "functionName": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "fileName",
+                                                            "functionName"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "name",
+                                                "code",
+                                                "message",
+                                                "stack"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "status": 500,
+                                    "code": "UNHANDLED_ERROR",
+                                    "title": "An error was raised and we didin't catch it :-/",
+                                    "error": {
+                                        "name": "Database Failure",
+                                        "code": "DATABASE_FAILURE",
+                                        "message": "Database connection went away",
+                                        "stack": []
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/inc": {
+            "post": {
+                "operationId": "inc",
+                "summary": "Increment a global counter of a given amount.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "inc": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "inc"
+                                ]
+                            },
+                            "examples": {
+                                "inc1": {
+                                    "summary": "Increment counter by 1.",
+                                    "value": {
+                                        "inc": 1
+                                    }
+                                },
+                                "dec1": {
+                                    "summary": "Decrement counter by 1.",
+                                    "value": {
+                                        "inc": -1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "State of the counter.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "counter": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "required": [
+                                        "counter"
+                                    ]
+                                },
+                                "example": {
+                                    "counter": 1
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Request validation error",
+                        "content": {
+                            "application/problem+json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properites": {
+                                        "status": {
+                                            "type": "number",
+                                            "const": 400
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "const": "REQUEST_VALIDATION_ERROR"
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "requestLocation": {
+                                                        "type": "string"
+                                                    },
+                                                    "locationPath": {
+                                                        "type": "string"
+                                                    },
+                                                    "messages": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "required": [
+                                                    "requestLocation",
+                                                    "locationPath",
+                                                    "messages"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "status": 400,
+                                    "code": "REQUEST_VALIDATION_ERROR",
+                                    "title": "Request Validation Error",
+                                    "errors": [
+                                        {
+                                            "requestLocation": "body",
+                                            "locationPath": "inc",
+                                            "message": [
+                                                "Expected number given string"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "An error was raised and we didn't catch it :-/",
+                        "content": {
+                            "application/problem+json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properites": {
+                                        "status": {
+                                            "type": "number",
+                                            "const": 500
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string",
+                                            "const": "UNHANDLED_ERROR"
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "error": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "code": {
+                                                    "type": "string"
+                                                },
+                                                "message": {
+                                                    "type": "string"
+                                                },
+                                                "stack": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "fileName": {
+                                                                "type": "string"
+                                                            },
+                                                            "functionName": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "fileName",
+                                                            "functionName"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "name",
+                                                "code",
+                                                "message",
+                                                "stack"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "status": 500,
+                                    "code": "UNHANDLED_ERROR",
+                                    "title": "An error was raised and we didin't catch it :-/",
+                                    "error": {
+                                        "name": "Database Failure",
+                                        "code": "DATABASE_FAILURE",
+                                        "message": "Database connection went away",
+                                        "stack": []
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

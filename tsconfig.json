@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "removeComments": true,
+    "newLine": "lf",
+    "noUnusedLocals": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "lib": ["ESNext"],
+    "baseUrl": ".",
+    "outDir": "dist",
+    "noEmit": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "noErrorTruncation": true,
+    "noUncheckedIndexedAccess": true,
+    "declaration": true,
+    "paths": {
+      "@app/*": ["./src/*"],
+      "@test/*": ["./test/*"],
+      "@root/*": ["./*"],
+      "@schemas/*": ["./resources/schemas/*"]
+    },
+    "plugins": [
+      {
+        "transform": "typescript-transform-paths"
+      }
+    ]
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "esModuleInterop": true
+    }
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"]
+}

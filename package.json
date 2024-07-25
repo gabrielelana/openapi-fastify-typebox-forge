@@ -1,0 +1,64 @@
+{
+  "name": "openapi-fastify-typebox-forge",
+  "version": "0.1.0",
+  "description": "Forge TypeBox code and types for Fastify routes from OpenAPI specifications",
+  "keywords": ["openapi", "fastify", "typebox", "type", "typesafe", "nodejs", "typescript"],
+  "main": "dist/index.js",
+  "bin": {
+    "openapi-fastify-typebox-forge": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsup --tsconfig tsconfig.build.json",
+    "build:production": "tsup --tsconfig tsconfig.build.json --env.NODE_ENV production",
+    "check": "pnpm tc && pnpm format:check && pnpm lint:check",
+    "fix": "pnpm format:fix && pnpm lint:fix",
+    "format:check": "biome format .",
+    "format:fix": "biome format --write .",
+    "lint:check": "biome lint .",
+    "lint:fix": "biome lint . --write",
+    "exec": "pnpm build && node dist/index.js",
+    "exec:dev": "tsx --tsconfig tsconfig.build.json src/index.ts",
+    "tc": "tsc -noEmit",
+    "test": "jest --runInBand --config ./jest.json",
+    "test:e2e": "./test/e2e/build_and_run.sh"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.32.34",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "change-case": "^5.4.4",
+    "commander": "^12.1.0",
+    "openapi-types": "^12.1.3",
+    "schema2typebox": "^1.7.5",
+    "ts-morph": "^23.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.10",
+    "@types/sinon": "^17.0.3",
+    "jest": "^29.7.0",
+    "sinon": "^18.0.0",
+    "ts-jest": "^29.2.1",
+    "ts-node": "^10.9.2",
+    "ts-patch": "^3.2.1",
+    "tsup": "^8.1.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "typescript-transform-paths": "^3.4.7"
+  },
+  "packageManager": "pnpm@9.5.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "tsup": {
+    "entry": ["src/**/*.ts"],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true,
+    "format": ["cjs", "esm"],
+    "legacyOutput": true,
+    "target": "es2018"
+  }
+}
