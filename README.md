@@ -1,8 +1,8 @@
-## Generate TypeBox code and types for Fastify routes from OpenAPI specifications
+## Derive Fastify types from an OpenAPI specification
 
-If you design your API by creating the OpenAPI specification then if you use
-[Fastify](https://fastify.dev/) with
-[TypeBox](https://github.com/sinclairzx81/typebox) type provider then you will
+If you design your API by creating the OpenAPI specification first then if you
+use [Fastify](https://fastify.dev/) with
+[TypeBox](https://github.com/sinclairzx81/typebox) a type provider then you will
 find this project useful.
 
 Given the OpenAPI specification (`-i` or `--openapi` command line argument) it
@@ -23,9 +23,32 @@ argument) the following files.
 It will be better to generate the code in `node_modules` directory as
 [Prisma](https://www.prisma.io) does.
 
-Let's say that starting from [this example](./resources/examples/example.json)
-we generate the code in `node_modules/.openapi/` directory, then you will have
-something like that in your code
+Let's say that we are using [this example](./resources/examples/example.json)
+ and we generate the code in `node_modules/.openapi/` directory, then the
+ following files will be generated
+
+```console
+❯ ll .tmp/.tg/example
+total 64
+drwxrwxr-x 2 coder coder 4096 Jul 25 16:07 .
+drwxrwxr-x 4 coder coder 4096 Jul 25 16:07 ..
+-rw-rw-r-- 1 coder coder  126 Jul 25 16:07 inc.200.ResponseBody.json
+-rw-rw-r-- 1 coder coder  514 Jul 25 16:07 inc.200.ResponseBody.ts
+-rw-rw-r-- 1 coder coder  802 Jul 25 16:07 inc.400.ResponseBody.json
+-rw-rw-r-- 1 coder coder  474 Jul 25 16:07 inc.400.ResponseBody.ts
+-rw-rw-r-- 1 coder coder 1036 Jul 25 16:07 inc.500.ResponseBody.json
+-rw-rw-r-- 1 coder coder  474 Jul 25 16:07 inc.500.ResponseBody.ts
+-rw-rw-r-- 1 coder coder  518 Jul 25 16:07 inc.Fastify.ts
+-rw-rw-r-- 1 coder coder  119 Jul 25 16:07 inc.RequestBody.json
+-rw-rw-r-- 1 coder coder  509 Jul 25 16:07 inc.RequestBody.ts
+-rw-rw-r-- 1 coder coder   41 Jul 25 16:07 ping.200.ResponseBody.json
+-rw-rw-r-- 1 coder coder  494 Jul 25 16:07 ping.200.ResponseBody.ts
+-rw-rw-r-- 1 coder coder 1036 Jul 25 16:07 ping.500.ResponseBody.json
+-rw-rw-r-- 1 coder coder  474 Jul 25 16:07 ping.500.ResponseBody.ts
+-rw-rw-r-- 1 coder coder  309 Jul 25 16:07 ping.Fastify.ts
+```
+
+And use can use them in your code in the following way
 
 ```TypeScript
 import * as ping from '.openapi/ping.Fastify'
