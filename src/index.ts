@@ -26,6 +26,7 @@ type CommandOptions = { openapi: string; out: string }
 type TypeBoxComponents = {
   operationId: string
   body: string | undefined
+  query: string | undefined
   response: Record<string, string>
 }
 
@@ -116,6 +117,7 @@ async function generateTypeBoxComponentsForOperation(
   const res: TypeBoxComponents = {
     operationId,
     body: undefined,
+    query: undefined,
     response: {},
   }
 
@@ -135,6 +137,27 @@ async function generateTypeBoxComponentsForOperation(
       requestSchema = notRef(mediaTypeObject.schema)
     })
   }
+
+  // Parameters in QueryString
+  // handle `${op.id}.QueryString.json`
+  // TODO: in === 'path' for PathParameters.json
+  // TODO: in === 'header' for HeaderParameters.json
+  const queryStringParametersSchema: Record<string, OASV31.SchemaObject> = {}
+  whenDefined(operation.parameters, (parameters) => {
+    parameters.forEach((parameter) => {
+      whenDefined(notRef(parameter), (parameter) => {
+        if (parameter.in === 'query') {
+          // TODO: we should warning the user when a schema is a ref because we do not support refs
+          whenDefined(notRef(parameter.schema), (schema) => {
+            // TODO: fix notRef which is not working in this case, don't know why
+            if (!('$ref' in schema)) {
+              queryStringParametersSchema[parameter.name] = schema
+            }
+          })
+        }
+      })
+    })
+  })
 
   // Responses
   // handle `${op.id}.${status}.ResponseBody.json`
@@ -164,6 +187,19 @@ async function generateTypeBoxComponentsForOperation(
       requestSchema,
       operationId,
       'RequestBody',
+      destinationDirectoryName,
+    )
+  }
+
+  if (Object.keys(queryStringParametersSchema).length > 0) {
+    const schema: OASV31.SchemaObject = {
+      type: 'object',
+      properties: queryStringParametersSchema,
+    }
+    res.query = await writeComponentSchemas(
+      schema,
+      operationId,
+      'QueryString',
       destinationDirectoryName,
     )
   }
@@ -207,6 +243,9 @@ async function generateTypeBoxFastify(
   whenDefined(components.body, (path) =>
     nodes.push(generateImport(`./${path}`, componentName(path))),
   )
+  whenDefined(components.query, (path) => {
+    nodes.push(generateImport(`./${path}`, componentName(path)))
+  })
   for (const statusCode in components.response) {
     const path = ensureDefined(components.response[statusCode])
     nodes.push(generateImport(`./${path}`, `${componentName(path)}${statusCode}`))
@@ -216,6 +255,9 @@ async function generateTypeBoxFastify(
   const exportTypeFields: ts.TypeElement[] = []
   whenDefined(components.body, (path) =>
     exportTypeFields.push(generateTypeExport('body', componentName(path))),
+  )
+  whenDefined(components.query, (path) =>
+    exportTypeFields.push(generateTypeExport('query', componentName(path))),
   )
   const exportTypeResponseFields: ts.TypeElement[] = []
   for (const statusCode in components.response) {
@@ -245,6 +287,9 @@ async function generateTypeBoxFastify(
   const exportFields: ts.ObjectLiteralElementLike[] = []
   whenDefined(components.body, (path) =>
     exportFields.push(generateExport('body', componentName(path))),
+  )
+  whenDefined(components.query, (path) =>
+    exportFields.push(generateExport('query', componentName(path))),
   )
   const exportResponseFields: ts.ObjectLiteralElementLike[] = []
   for (const statusCode in components.response) {
@@ -401,7 +446,9 @@ function whenDefined<T, V>(x: T | undefined, f: (x: T) => V): V | undefined {
   return f(x)
 }
 
-function notRef<T>(maybeReference: OASV31.ReferenceObject | T | undefined): T | undefined {
+function notRef<T, U>(maybeReference: OASV31.ReferenceObject | T | U | undefined): T | U | undefined
+function notRef<T>(maybeReference: OASV31.ReferenceObject | T | undefined): T | undefined
+function notRef(maybeReference: unknown) {
   if (
     maybeReference === undefined ||
     maybeReference === null ||

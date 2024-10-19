@@ -1,0 +1,38 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI example",
+    "summary": "OpenAPI example",
+    "description": "This is a longer *description* for this example",
+    "version": "0.0.1"
+  },
+  "servers": [],
+  "paths": {
+    "/QueryStringExample": {
+      "get": {
+        "operationId": "QueryStringExample",
+        "summary": "Ping to the server, if it's healthy it will reply pong.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "example": 50
+            },
+            "description": "The number of items to skip before starting to collect the result set"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "example": 10
+            },
+            "description": "The numbers of items to return"
+          }
+        ]
+      }
+    }
+  }
+}
