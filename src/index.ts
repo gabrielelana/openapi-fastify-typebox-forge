@@ -27,6 +27,7 @@ type TypeBoxComponents = {
   operationId: string
   body: string | undefined
   query: string | undefined
+  path: string | undefined
   response: Record<string, string>
 }
 
@@ -118,6 +119,7 @@ async function generateTypeBoxComponentsForOperation(
     operationId,
     body: undefined,
     query: undefined,
+    path: undefined,
     response: {},
   }
 
@@ -140,21 +142,35 @@ async function generateTypeBoxComponentsForOperation(
 
   // Parameters in QueryString
   // handle `${op.id}.QueryString.json`
-  // TODO: in === 'path' for PathParameters.json
+  // handle `${op.id}.Path.json`
   // TODO: in === 'header' for HeaderParameters.json
-  const queryStringParametersSchema: Record<string, OASV31.SchemaObject> = {}
+  const queryParametersSchema: Record<string, { required: boolean; schema: OASV31.SchemaObject }> =
+    {}
+  const pathParametersSchema: Record<string, { required: boolean; schema: OASV31.SchemaObject }> =
+    {}
   whenDefined(operation.parameters, (parameters) => {
     parameters.forEach((parameter) => {
       whenDefined(notRef(parameter), (parameter) => {
-        if (parameter.in === 'query') {
-          // TODO: we should warning the user when a schema is a ref because we do not support refs
-          whenDefined(notRef(parameter.schema), (schema) => {
-            // TODO: fix notRef which is not working in this case, don't know why
-            if (!('$ref' in schema)) {
-              queryStringParametersSchema[parameter.name] = schema
+        // TODO: we should warning the user when a schema is a ref because we do not support refs
+        whenDefined(notRef(parameter.schema), (schema) => {
+          // TODO: fix notRef which is not working in this case, don't know why
+          if (!('$ref' in schema)) {
+            switch (parameter.in) {
+              case 'query':
+                queryParametersSchema[parameter.name] = {
+                  schema,
+                  required: parameter.required || false,
+                }
+                break
+              case 'path':
+                pathParametersSchema[parameter.name] = {
+                  schema,
+                  required: parameter.required || false,
+                }
+                break
             }
-          })
-        }
+          }
+        })
       })
     })
   })
@@ -191,15 +207,20 @@ async function generateTypeBoxComponentsForOperation(
     )
   }
 
-  if (Object.keys(queryStringParametersSchema).length > 0) {
-    const schema: OASV31.SchemaObject = {
-      type: 'object',
-      properties: queryStringParametersSchema,
-    }
+  if (Object.keys(queryParametersSchema).length > 0) {
     res.query = await writeComponentSchemas(
-      schema,
+      schemaFromParams(queryParametersSchema),
       operationId,
       'QueryString',
+      destinationDirectoryName,
+    )
+  }
+
+  if (Object.keys(pathParametersSchema).length > 0) {
+    res.path = await writeComponentSchemas(
+      schemaFromParams(pathParametersSchema),
+      operationId,
+      'Path',
       destinationDirectoryName,
     )
   }
@@ -246,6 +267,9 @@ async function generateTypeBoxFastify(
   whenDefined(components.query, (path) => {
     nodes.push(generateImport(`./${path}`, componentName(path)))
   })
+  whenDefined(components.path, (path) => {
+    nodes.push(generateImport(`./${path}`, componentName(path)))
+  })
   for (const statusCode in components.response) {
     const path = ensureDefined(components.response[statusCode])
     nodes.push(generateImport(`./${path}`, `${componentName(path)}${statusCode}`))
@@ -258,6 +282,9 @@ async function generateTypeBoxFastify(
   )
   whenDefined(components.query, (path) =>
     exportTypeFields.push(generateTypeExport('query', componentName(path))),
+  )
+  whenDefined(components.path, (path) =>
+    exportTypeFields.push(generateTypeExport('params', componentName(path))),
   )
   const exportTypeResponseFields: ts.TypeElement[] = []
   for (const statusCode in components.response) {
@@ -290,6 +317,9 @@ async function generateTypeBoxFastify(
   )
   whenDefined(components.query, (path) =>
     exportFields.push(generateExport('query', componentName(path))),
+  )
+  whenDefined(components.path, (path) =>
+    exportFields.push(generateExport('params', componentName(path))),
   )
   const exportResponseFields: ts.ObjectLiteralElementLike[] = []
   for (const statusCode in components.response) {
@@ -421,6 +451,22 @@ function collectOperations(oas: OASV31.Document): Operation[] {
 }
 
 // Utilities
+
+function schemaFromParams(
+  params: Record<string, { schema: OASV31.SchemaObject; required: boolean }>,
+): OASV31.SchemaObject {
+  return {
+    type: 'object',
+    properties: Object.fromEntries(
+      Object.entries(params).map(([name, p]) => {
+        return [name, p.schema]
+      }),
+    ),
+    required: Object.entries(params)
+      .filter(([, p]) => p.required)
+      .map(([name]) => name),
+  }
+}
 
 async function prepareDestination(directoryName: string): Promise<void> {
   try {

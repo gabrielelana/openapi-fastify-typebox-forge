@@ -1,0 +1,30 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI example",
+    "summary": "OpenAPI example",
+    "description": "This is a longer *description* for this example",
+    "version": "0.0.1"
+  },
+  "servers": [],
+  "paths": {
+    "/PathParametersExample/{id}": {
+      "get": {
+        "operationId": "PathParametersExample",
+        "summary": "Example of path parameters support.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "The user ID"
+          }
+        ]
+      }
+    }
+  }
+}
