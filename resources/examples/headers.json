@@ -1,0 +1,31 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI example",
+    "summary": "OpenAPI example",
+    "description": "This is a longer *description* for this example",
+    "version": "0.0.1"
+  },
+  "servers": [],
+  "paths": {
+    "/HeadersExample": {
+      "get": {
+        "operationId": "HeadersExample",
+        "summary": "Example of headers support.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The request ID",
+            "example": "51f72c62-832f-4757-9b23-95f91285a3bb"
+          }
+        ]
+      }
+    }
+  }
+}

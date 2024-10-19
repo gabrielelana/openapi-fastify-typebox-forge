@@ -28,6 +28,7 @@ type TypeBoxComponents = {
   body: string | undefined
   query: string | undefined
   path: string | undefined
+  headers: string | undefined
   response: Record<string, string>
 }
 
@@ -120,6 +121,7 @@ async function generateTypeBoxComponentsForOperation(
     body: undefined,
     query: undefined,
     path: undefined,
+    headers: undefined,
     response: {},
   }
 
@@ -143,10 +145,12 @@ async function generateTypeBoxComponentsForOperation(
   // Parameters in QueryString
   // handle `${op.id}.QueryString.json`
   // handle `${op.id}.Path.json`
-  // TODO: in === 'header' for HeaderParameters.json
+  // handle `${op.id}.Headers.json`
   const queryParametersSchema: Record<string, { required: boolean; schema: OASV31.SchemaObject }> =
     {}
   const pathParametersSchema: Record<string, { required: boolean; schema: OASV31.SchemaObject }> =
+    {}
+  const headerParametersSchema: Record<string, { required: boolean; schema: OASV31.SchemaObject }> =
     {}
   whenDefined(operation.parameters, (parameters) => {
     parameters.forEach((parameter) => {
@@ -168,6 +172,13 @@ async function generateTypeBoxComponentsForOperation(
                   required: parameter.required || false,
                 }
                 break
+              case 'header':
+                headerParametersSchema[parameter.name] = {
+                  schema,
+                  required: parameter.required || false,
+                }
+                break
+              // TODO: default should rais a warning?
             }
           }
         })
@@ -225,6 +236,15 @@ async function generateTypeBoxComponentsForOperation(
     )
   }
 
+  if (Object.keys(headerParametersSchema).length > 0) {
+    res.headers = await writeComponentSchemas(
+      schemaFromParams(headerParametersSchema),
+      operationId,
+      'Headers',
+      destinationDirectoryName,
+    )
+  }
+
   for (const statusCode in responsesSchema) {
     res.response[statusCode] = await writeComponentSchemas(
       ensureDefined(responsesSchema[statusCode]),
@@ -270,6 +290,9 @@ async function generateTypeBoxFastify(
   whenDefined(components.path, (path) => {
     nodes.push(generateImport(`./${path}`, componentName(path)))
   })
+  whenDefined(components.headers, (path) => {
+    nodes.push(generateImport(`./${path}`, componentName(path)))
+  })
   for (const statusCode in components.response) {
     const path = ensureDefined(components.response[statusCode])
     nodes.push(generateImport(`./${path}`, `${componentName(path)}${statusCode}`))
@@ -285,6 +308,9 @@ async function generateTypeBoxFastify(
   )
   whenDefined(components.path, (path) =>
     exportTypeFields.push(generateTypeExport('params', componentName(path))),
+  )
+  whenDefined(components.headers, (path) =>
+    exportTypeFields.push(generateTypeExport('headers', componentName(path))),
   )
   const exportTypeResponseFields: ts.TypeElement[] = []
   for (const statusCode in components.response) {
@@ -320,6 +346,9 @@ async function generateTypeBoxFastify(
   )
   whenDefined(components.path, (path) =>
     exportFields.push(generateExport('params', componentName(path))),
+  )
+  whenDefined(components.headers, (path) =>
+    exportFields.push(generateExport('headers', componentName(path))),
   )
   const exportResponseFields: ts.ObjectLiteralElementLike[] = []
   for (const statusCode in components.response) {
