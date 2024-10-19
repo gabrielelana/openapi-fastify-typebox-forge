@@ -319,14 +319,16 @@ async function generateTypeBoxFastify(
       generateTypeExport(statusCode, `${componentName(path)}${statusCode}`),
     )
   }
-  exportTypeFields.push(
-    ts.factory.createPropertySignature(
-      undefined,
-      ts.factory.createIdentifier('response'),
-      undefined,
-      ts.factory.createTypeLiteralNode(exportTypeResponseFields),
-    ),
-  )
+  if (exportTypeResponseFields.length > 0) {
+    exportTypeFields.push(
+      ts.factory.createPropertySignature(
+        undefined,
+        ts.factory.createIdentifier('response'),
+        undefined,
+        ts.factory.createTypeLiteralNode(exportTypeResponseFields),
+      ),
+    )
+  }
   nodes.push(
     ts.factory.createTypeAliasDeclaration(
       [ts.factory.createToken(ts.SyntaxKind.ExportKeyword)],
@@ -355,12 +357,14 @@ async function generateTypeBoxFastify(
     const path = ensureDefined(components.response[statusCode])
     exportResponseFields.push(generateExport(statusCode, `${componentName(path)}${statusCode}`))
   }
-  exportFields.push(
-    ts.factory.createPropertyAssignment(
-      ts.factory.createIdentifier('response'),
-      ts.factory.createObjectLiteralExpression(exportResponseFields),
-    ),
-  )
+  if (exportResponseFields.length > 0) {
+    exportFields.push(
+      ts.factory.createPropertyAssignment(
+        ts.factory.createIdentifier('response'),
+        ts.factory.createObjectLiteralExpression(exportResponseFields),
+      ),
+    )
+  }
   nodes.push(
     ts.factory.createVariableStatement(
       [ts.factory.createToken(ts.SyntaxKind.ExportKeyword)],
