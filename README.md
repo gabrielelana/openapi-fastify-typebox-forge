@@ -24,8 +24,8 @@ It will be better to generate the code in `node_modules` directory as
 [Prisma](https://www.prisma.io) does.
 
 Let's say that we are using [this example](./resources/examples/example.json)
- and we generate the code in `node_modules/.openapi/` directory, then the
- following files will be generated
+and we generate the code in `node_modules/.openapi/` directory, then the
+following files will be generated
 
 ```console
 ❯ ll node_modules/.openapi
@@ -87,5 +87,5 @@ npx gabrielelana/openapi-fastify-typebox-forge -i resources/examples/example.jso
 - [ ] handle path parameters
 - [ ] handle request headers
 - [ ] add detailed log of what it's doing, only with `q` or `--quiet` flags then suppress them
-- [ ] only with  `-d` or `--debug` flags print full exception on STDERR
+- [ ] only with `-d` or `--debug` flags print full exception on STDERR
 - [ ] add tests
