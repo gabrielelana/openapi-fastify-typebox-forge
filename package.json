@@ -19,8 +19,10 @@
     "exec": "pnpm build && node dist/index.js",
     "exec:dev": "tsx --tsconfig tsconfig.build.json src/index.ts",
     "tc": "tsc -noEmit",
-    "test": "jest --runInBand --config ./jest.json",
-    "test:e2e": "./test/e2e/build_and_run.sh"
+    "test": "pnpm openapi:check && pnpm generate:test && pnpm types:check",
+    "generate:test": "./test/generate.sh",
+    "openapi:check": "npx @quobix/vacuum lint -deqbm ./test/*.json 2>/dev/null 1>&2",
+    "types:check": "tsc --project tsconfig.jest.json"
   },
   "dependencies": {
     "@sinclair/typebox": "^0.32.34",

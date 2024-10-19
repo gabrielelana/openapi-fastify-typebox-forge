@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "cost_per_unit": {
+      "type": "integer"
+    },
+    "stock_quantity": {
+      "type": "integer"
+    },
+    "material_type_id": {
+      "type": "string",
+      "format": "uuid"
+    }
+  }
+}

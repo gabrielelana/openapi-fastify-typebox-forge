@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "image_file": {
+      "type": "string",
+      "format": "binary"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "material_name": {
+          "type": "string"
+        },
+        "material_type": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "cost_per_unit": {
+          "type": "integer"
+        },
+        "stock_quantity": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "object",
+  "properties": {
+    "offset": {
+      "type": "integer",
+      "example": 50
+    },
+    "limit": {
+      "type": "integer",
+      "example": 10
+    }
+  },
+  "required": [
+    "offset"
+  ]
+}

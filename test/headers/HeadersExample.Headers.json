@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "X-Request-ID": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "required": [
+    "X-Request-ID"
+  ]
+}
