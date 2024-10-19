@@ -83,9 +83,5 @@ npx gabrielelana/openapi-fastify-typebox-forge -i resources/examples/example.jso
 
 ### Roadmap
 
-- [ ] handle query strings
-- [ ] handle path parameters
-- [ ] handle request headers
 - [ ] add detailed log of what it's doing, only with `q` or `--quiet` flags then suppress them
 - [ ] only with `-d` or `--debug` flags print full exception on STDERR
-- [ ] add tests
