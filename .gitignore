@@ -1,0 +1,5 @@
+node_modules
+.envrc
+.tmp
+.env
+.db
