@@ -15,6 +15,7 @@ import type * as RegisterUser from './cozywear/RegisterUser.Fastify'
 import type * as RemoveMaterial from './cozywear/RemoveMaterial.Fastify'
 import type * as RemoveStyle from './cozywear/RemoveStyle.Fastify'
 import type * as UserLogin from './cozywear/UserLogin.Fastify'
+import type * as UserLogout from './cozywear/UserLogout.Fastify'
 import type { Equal, Expand, Expect } from './types'
 
 type RegisterUser_Given = Expand<RegisterUser.T>
@@ -25,6 +26,10 @@ type RegisterUser_Expected = {
     name: string
     password: string
   }
+  response: {
+    201: unknown
+    400: unknown
+  }
 }
 
 type UserLogin_Given = Expand<UserLogin.T>
@@ -32,6 +37,17 @@ type UserLogin_Expected = {
   body: {
     email: string
     password: string
+  }
+  response: {
+    200: unknown
+    401: unknown
+  }
+}
+
+type UserLogout_Given = Expand<UserLogout.T>
+type UserLogout_Expected = {
+  response: {
+    200: unknown
   }
 }
 
@@ -47,6 +63,10 @@ type AddNewClothMaterial_Expected = {
           stock_quantity?: number | undefined
         }
       | undefined
+  }
+  response: {
+    201: unknown
+    400: unknown
   }
 }
 
@@ -80,6 +100,10 @@ type RemoveMaterial_Expected = {
   params: {
     id: string
   }
+  response: {
+    200: unknown
+    404: unknown
+  }
 }
 
 type GetMaterialTypes_Given = Expand<GetMaterialTypes.T>
@@ -98,6 +122,10 @@ type EditMaterial_Expected = {
     stock_quantity?: number | undefined
     material_type_id?: string | undefined
   }
+  response: {
+    200: unknown
+    400: unknown
+  }
 }
 
 type AddNewClothStyle_Given = Expand<AddNewClothStyle.T>
@@ -115,11 +143,10 @@ type AddNewClothStyle_Expected = {
         }
       | undefined
   }
-  // TODO: probably should type the responses as unknown?
-  // response: {
-  // 201: unknown
-  // 400: unknown
-  // }
+  response: {
+    201: unknown
+    400: unknown
+  }
 }
 
 type GetStyles_Given = Expand<GetStyles.T>
@@ -154,7 +181,10 @@ type RemoveStyle_Expected = {
   params: {
     id: string
   }
-  // TODO: should have the responses as unknown?
+  response: {
+    200: unknown
+    404: unknown
+  }
 }
 
 type GetFitTypes_Given = Expand<GetFitTypes.T>
@@ -188,6 +218,10 @@ type EditStyle_Expected = {
     style_type_id?: string | undefined
     fit_type_id?: string | undefined
   }
+  response: {
+    200: unknown
+    400: unknown
+  }
 }
 
 type PlaceOrder_Given = Expand<PlaceOrder.T>
@@ -209,6 +243,7 @@ type PlaceOrder_Expected = {
       special_instructions?: string | undefined
       created_at?: string | undefined
     }
+    400: unknown
   }
 }
 
@@ -278,12 +313,14 @@ type GetUserNotifications_Expected = {
       page?: number | undefined
       per_page?: number | undefined
     }
+    401: unknown
   }
 }
 
 export type _ = [
   Expect<Equal<RegisterUser_Given, RegisterUser_Expected>>,
   Expect<Equal<UserLogin_Given, UserLogin_Expected>>,
+  Expect<Equal<UserLogout_Given, UserLogout_Expected>>,
   Expect<Equal<AddNewClothMaterial_Given, AddNewClothMaterial_Expected>>,
   Expect<Equal<GetMaterials_Given, GetMaterials_Expected>>,
   Expect<Equal<RemoveMaterial_Given, RemoveMaterial_Expected>>,

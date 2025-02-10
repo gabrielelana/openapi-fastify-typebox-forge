@@ -16,6 +16,10 @@ const changeCaseLazy = import('change-case')
 
 const httpMethods = ['get', 'put', 'post', 'delete', 'patch', 'options', 'trace', 'head'] as const
 
+const anySchema = {
+  type: 'object',
+} as const
+
 type Operation = OASV31.OperationObject & {
   path: string
   method: (typeof httpMethods)[number]
@@ -192,6 +196,12 @@ async function generateTypeBoxComponentsForOperation(
   whenDefined(operation.responses, (responses) => {
     Object.entries(responses).forEach(([statusCode, responseObject]) => {
       whenDefined(notRef(responseObject), (responseObject) => {
+        // NOTE: when description is defined without a content we consider that
+        // as the response can be whatever
+        if (responseObject.content === undefined) {
+          responsesSchema[statusCode] = anySchema
+          return
+        }
         whenDefined(responseObject.content, (contentObject) => {
           const entries = Object.entries(contentObject)
           if (entries.length > 1) {

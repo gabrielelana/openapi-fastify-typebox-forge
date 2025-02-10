@@ -1,0 +1,26 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI example",
+    "summary": "OpenAPI example",
+    "description": "This is a longer *description* for this example",
+    "version": "0.0.1"
+  },
+  "servers": [],
+  "paths": {
+    "/EmptyResponseExample": {
+      "get": {
+        "operationId": "EmptyResponseExample",
+        "summary": "An example request to check if empty responses will be typed correctly.",
+        "responses": {
+          "200": {
+            "description": "This is an empty response, only description is ok."
+          },
+          "400": {
+            "description": "An empty description is supposed to be... whatever."
+          }
+        }
+      }
+    }
+  }
+}
