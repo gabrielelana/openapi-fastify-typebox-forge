@@ -21,7 +21,7 @@
     "tc": "tsc -noEmit",
     "test": "pnpm openapi:check && pnpm generate:test && pnpm types:check",
     "generate:test": "./test/generate.sh",
-    "openapi:check": "npx @quobix/vacuum lint -deqbm ./test/*.json 2>/dev/null 1>&2",
+    "openapi:check": "pnpx @quobix/vacuum lint -deqbm ./test/*.json 2>/dev/null 1>&2",
     "types:check": "tsc --project tsconfig.jest.json"
   },
   "dependencies": {
