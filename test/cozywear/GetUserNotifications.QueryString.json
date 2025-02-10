@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "page": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1
+    },
+    "per_page": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 50,
+      "default": 25
+    }
+  },
+  "required": []
+}

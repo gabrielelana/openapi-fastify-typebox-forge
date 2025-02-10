@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "costperunit": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sort_id": {
+            "type": "integer"
+          },
+          "filename": {
+            "type": "string"
+          },
+          "material_type_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fit_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "total": {
+      "type": "integer"
+    },
+    "page": {
+      "type": "integer"
+    },
+    "per_page": {
+      "type": "integer"
+    }
+  }
+}

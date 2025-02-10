@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "image_file": {
+      "type": "string",
+      "format": "binary"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "style_name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "style_type": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "material_type_required": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "fit_type": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "cost_per_unit": {
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

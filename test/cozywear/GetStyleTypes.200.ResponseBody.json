@@ -1,0 +1,19 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "style_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "base_style_type": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      }
+    }
+  }
+}

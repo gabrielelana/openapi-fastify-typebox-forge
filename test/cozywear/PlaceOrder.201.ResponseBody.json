@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "order_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "customer_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "cloth_style_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "material_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "size": {
+      "type": "string"
+    },
+    "special_instructions": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "cloth_style_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "material_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "size": {
+      "type": "string"
+    },
+    "special_instructions": {
+      "type": "string"
+    },
+    "payment_amount": {
+      "type": "number"
+    }
+  }
+}
