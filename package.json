@@ -1,6 +1,6 @@
 {
   "name": "openapi-fastify-typebox-forge",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Forge TypeBox code and types for Fastify routes from OpenAPI specifications",
   "keywords": ["openapi", "fastify", "typebox", "type", "typesafe", "nodejs", "typescript"],
   "main": "dist/index.js",

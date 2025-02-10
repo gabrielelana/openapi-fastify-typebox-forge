@@ -4,7 +4,7 @@ import type { Equal, Expand, Expect } from './types'
 type Given = Expand<Query.T>
 
 type Expected = {
-  query: {
+  querystring: {
     offset: number
     limit?: number | undefined
   }

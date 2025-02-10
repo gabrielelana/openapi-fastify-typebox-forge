@@ -1,5 +1,5 @@
 import * as QueryString from "./QueryStringExample.QueryString";
 export type T = {
-    query: QueryString.T;
+    querystring: QueryString.T;
 };
-export var T = { query: QueryString.T };
+export var T = { querystring: QueryString.T };

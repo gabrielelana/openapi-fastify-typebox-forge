@@ -26,7 +26,7 @@ type CommandOptions = { openapi: string; out: string }
 type TypeBoxComponents = {
   operationId: string
   body: string | undefined
-  query: string | undefined
+  querystring: string | undefined
   path: string | undefined
   headers: string | undefined
   response: Record<string, string>
@@ -119,7 +119,7 @@ async function generateTypeBoxComponentsForOperation(
   const res: TypeBoxComponents = {
     operationId,
     body: undefined,
-    query: undefined,
+    querystring: undefined,
     path: undefined,
     headers: undefined,
     response: {},
@@ -219,7 +219,7 @@ async function generateTypeBoxComponentsForOperation(
   }
 
   if (Object.keys(queryParametersSchema).length > 0) {
-    res.query = await writeComponentSchemas(
+    res.querystring = await writeComponentSchemas(
       schemaFromParams(queryParametersSchema),
       operationId,
       'QueryString',
@@ -284,7 +284,7 @@ async function generateTypeBoxFastify(
   whenDefined(components.body, (path) =>
     nodes.push(generateImport(`./${path}`, componentName(path))),
   )
-  whenDefined(components.query, (path) => {
+  whenDefined(components.querystring, (path) => {
     nodes.push(generateImport(`./${path}`, componentName(path)))
   })
   whenDefined(components.path, (path) => {
@@ -303,8 +303,8 @@ async function generateTypeBoxFastify(
   whenDefined(components.body, (path) =>
     exportTypeFields.push(generateTypeExport('body', componentName(path))),
   )
-  whenDefined(components.query, (path) =>
-    exportTypeFields.push(generateTypeExport('query', componentName(path))),
+  whenDefined(components.querystring, (path) =>
+    exportTypeFields.push(generateTypeExport('querystring', componentName(path))),
   )
   whenDefined(components.path, (path) =>
     exportTypeFields.push(generateTypeExport('params', componentName(path))),
@@ -343,8 +343,8 @@ async function generateTypeBoxFastify(
   whenDefined(components.body, (path) =>
     exportFields.push(generateExport('body', componentName(path))),
   )
-  whenDefined(components.query, (path) =>
-    exportFields.push(generateExport('query', componentName(path))),
+  whenDefined(components.querystring, (path) =>
+    exportFields.push(generateExport('querystring', componentName(path))),
   )
   whenDefined(components.path, (path) =>
     exportFields.push(generateExport('params', componentName(path))),

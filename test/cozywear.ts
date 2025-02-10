@@ -52,7 +52,7 @@ type AddNewClothMaterial_Expected = {
 
 type GetMaterials_Given = Expand<GetMaterials.T>
 type GetMaterials_Expected = {
-  query: {
+  querystring: {
     page?: number | undefined
     per_page?: number | undefined
   }
@@ -124,7 +124,7 @@ type AddNewClothStyle_Expected = {
 
 type GetStyles_Given = Expand<GetStyles.T>
 type GetStyles_Expected = {
-  query: {
+  querystring: {
     page?: number | undefined
     per_page?: number | undefined
   }
@@ -214,7 +214,7 @@ type PlaceOrder_Expected = {
 
 type GetStylesToDisplay_Given = Expand<GetStylesToDisplay.T>
 type GetStylesToDisplay_Expected = {
-  query: {
+  querystring: {
     page?: number | undefined
     per_page?: number | undefined
   }
@@ -238,7 +238,7 @@ type GetStylesToDisplay_Expected = {
 
 type GetMaterialsToDisplay_Given = Expand<GetMaterialsToDisplay.T>
 type GetMaterialsToDisplay_Expected = {
-  query: {
+  querystring: {
     page?: number | undefined
     per_page?: number | undefined
   }
@@ -261,7 +261,7 @@ type GetMaterialsToDisplay_Expected = {
 
 type GetUserNotifications_Given = Expand<GetUserNotifications.T>
 type GetUserNotifications_Expected = {
-  query: {
+  querystring: {
     page?: number | undefined
     per_page?: number | undefined
   }
